@@ -24,7 +24,7 @@ body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#ee
 .empresa-card:active{filter:brightness(.92)}
 .empresa-card.fg{background:#c2410c;color:#fff}
 .empresa-card.jl{background:#1f3a5f;color:#fff}
-.empresa-card.pm{background:#d9dde5;color:#6b7280}
+.empresa-card.pm{background:#15803d;color:#fff}
 .empresa-icon{font-size:26px;width:38px;text-align:center}
 .empresa-info{flex:1 1 auto}
 .empresa-nome{font-size:17px;font-weight:800;letter-spacing:.2px}
@@ -147,9 +147,36 @@ body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#ee
 .fg-resumo-prod .rp-q{font-weight:800;color:#c2410c;min-width:26px}
 
 /* ===== PRATIC METAL ===== */
-.pm-head{background:#4b5563}
-.pm-breve{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#8a93a3;font-size:17px;font-weight:600;gap:10px}
-.pm-breve-icon{font-size:52px}
+.pm-head{background:#15803d}
+.pm-enviar{background:#15803d}.pm-enviar:active{background:#166534}
+.pm-copiar{background:#16a34a}.pm-copiar:active{background:#15803d}
+.pm-total{color:#15803d}
+.pm-tipos-bar{display:flex;gap:7px;overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:9px;padding-bottom:2px;scrollbar-width:none}
+.pm-tipos-bar::-webkit-scrollbar{display:none}
+.pm-tipo-chip{flex:0 0 auto;border:none;background:rgba(255,255,255,.16);color:#fff;font-size:13px;font-weight:700;padding:8px 14px;border-radius:20px;white-space:nowrap}
+.pm-tipo-chip.ativo{background:#fff;color:#15803d}
+.pm-tipo-hdr{font-size:13px;font-weight:800;color:#15803d;text-transform:uppercase;letter-spacing:.7px;padding:12px 6px 6px}
+.pm-card{background:#fff;border:1px solid #e2e6ec;border-radius:13px;padding:11px 12px;margin-bottom:8px}
+.pm-card.tem{border-color:#a7d4b4;background:#f3faf5}
+.pm-card.pm-single{display:flex;align-items:center;gap:10px;padding:10px 12px}
+.pm-nome{font-size:15px;font-weight:700;color:#1a2230;margin-bottom:8px}
+.pm-single .pm-nome{flex:1 1 auto;margin-bottom:0;font-size:15.5px}
+.pm-volt-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.pm-volt-row:last-of-type{margin-bottom:0}
+.pm-volt-label{flex:0 0 48px;font-size:12px;font-weight:800;color:#5b6677;text-align:center;background:#eef1f5;border-radius:7px;padding:4px 4px}
+.pm-volt-label.tem{background:#15803d;color:#fff}
+.pm-counter{display:flex;align-items:center;gap:6px;flex:1 1 auto}
+.pm-menos{width:44px;height:46px;border:none;border-radius:10px;background:#cfd6e0;color:#5b6677;font-size:24px;font-weight:800;display:flex;align-items:center;justify-content:center;user-select:none}
+.pm-menos:active{background:#b9c1cd}.pm-menos:disabled{opacity:.3}
+.pm-mais{flex:1;height:46px;border:none;border-radius:10px;background:#15803d;color:#fff;font-size:28px;font-weight:800;display:flex;align-items:center;justify-content:center;user-select:none}
+.pm-mais:active{background:#16a34a}
+.pm-num{min-width:38px;text-align:center;font-size:22px;font-weight:800;color:#9aa3b0;font-variant-numeric:tabular-nums}
+.pm-num.tem{color:#15803d}
+.pm-num.pulsar{animation:pmPulso .2s ease-out}
+@keyframes pmPulso{0%{transform:scale(1)}35%{transform:scale(1.4);color:#15803d}100%{transform:scale(1)}}
+.pm-resumo-item{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #e2e6ec;border-radius:12px;padding:13px 15px;margin-bottom:8px}
+.pm-resumo-item .rnome{flex:1 1 auto;font-size:15px;font-weight:600}
+.pm-resumo-item .rqtd{flex:0 0 auto;font-size:22px;font-weight:800;color:#15803d;min-width:36px;text-align:right}
 
 /* ===== TOAST ===== */
 .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:#152840;color:#fff;padding:11px 18px;border-radius:24px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:60;white-space:nowrap}
@@ -199,7 +226,7 @@ body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#ee
     <button class="empresa-card pm" onclick="abrirView('viewPM')">
       <div class="empresa-info">
         <div class="empresa-nome">PRATIC METAL</div>
-        <div class="empresa-badge">Em breve</div>
+        <div class="empresa-badge" id="badgePM">0 peças</div>
       </div>
       <span class="empresa-seta">›</span>
     </button>
@@ -310,11 +337,44 @@ body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#ee
   <div class="view-header pm-head">
     <button class="back-btn" onclick="voltarHome()">‹ Voltar</button>
     <div class="view-titulo">Pratic Metal</div>
+    <div class="view-sub">Contagem de peças para envio</div>
+    <div class="busca-wrap">
+      <input id="pmBusca" class="busca-inp" type="text" inputmode="search" autocomplete="off" placeholder="Buscar produto…">
+      <button class="limpar-busca" id="pmLimparBusca" aria-label="Limpar">×</button>
+    </div>
+    <div class="pm-tipos-bar" id="pmTiposBar"></div>
   </div>
-  <div class="pm-breve">
-    <div class="pm-breve-icon">🏗️</div>
-    <div>Em breve</div>
-    <div style="font-size:13px;color:#a0a9b5;margin-top:2px">Produtos serão adicionados em breve</div>
+  <div class="view-main" id="pmLista"></div>
+  <div class="view-footer">
+    <div class="total-linha">
+      <span class="total-rot">Total de peças</span>
+      <span class="total-num pm-total" id="pmTotal">0</span>
+    </div>
+    <div class="acoes">
+      <button class="acao pm-enviar" id="pmBtnEnviar">Enviar</button>
+      <button class="acao pm-copiar" id="pmBtnCopiar">Copiar</button>
+      <button class="acao menu-btn" id="pmBtnMenu">⋯</button>
+    </div>
+  </div>
+</div>
+
+<div class="sheet-bg" id="pmSheetBg"></div>
+<div class="sheet" id="pmSheetMenu">
+  <h2>Opções</h2>
+  <div class="p-sub">Limpe tudo só depois de enviar a contagem.</div>
+  <button class="acao reset" id="pmBtnLimpar">Limpar tudo</button>
+  <button class="acao fechar-sheet" id="pmBtnFecharMenu">Voltar</button>
+</div>
+
+<div class="full" id="pmResumo">
+  <div class="full-head" style="background:#15803d">
+    <button class="full-voltar" id="pmResumoFechar">‹</button>
+    <div class="full-titulo">Resumo Pratic Metal</div>
+  </div>
+  <div class="full-body" id="pmResumoBody"></div>
+  <div class="full-foot">
+    <button class="acao pm-enviar" id="pmBtnFolhaPDF">Folha PDF / Imprimir</button>
+    <button class="acao pm-copiar" id="pmBtnCopiarResumo">Copiar lista</button>
   </div>
 </div>
 
@@ -347,6 +407,8 @@ function atualizarBadges(){
   document.getElementById('badgeJL').textContent=jt+(jt===1?' peça':' peças');
   let fc=0;for(const n in fgRegistros)fc+=(fgRegistros[n]||[]).reduce((s,r)=>s+r.q,0);
   document.getElementById('badgeFG').textContent=fc+(fc===1?' defeito':' defeitos');
+  const pt=Object.values(pmQtds).reduce((a,b)=>a+(parseInt(b)||0),0);
+  document.getElementById('badgePM').textContent=pt+(pt===1?' peça':' peças');
 }
 
 // ===================================================
@@ -792,9 +854,232 @@ function toast(msg){
   clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('on'),2200);
 }
 
+// ===================================================
+// ========== PRATIC METAL ==========
+// ===================================================
+const PM_VARS={
+  volt:[{k:'110',lbl:'110',pdf:'110V'},{k:'220',lbl:'220',pdf:'220V'}],
+  lado:[{k:'ESQ',lbl:'ESQ',pdf:'ESQUERDO'},{k:'DIR',lbl:'DIR',pdf:'DIREITO'}]
+};
+const PM_GRUPOS=[
+  {tipo:"CHAPAS ELÉTRICAS",itens:[
+    {nome:"CHAPA ELÉTRICA 40X35",volt:true},
+    {nome:"CHAPA ELÉTRICA 70X30",volt:true},
+  ]},
+  {tipo:"CHAPAS GÁS",itens:[
+    {nome:"CHAPA GÁS 80X40 5MM"},
+    {nome:"CHAPA GÁS 97X30"},
+    {nome:"CHAPA GÁS ROBUST"},
+  ]},
+  {tipo:"CREPE/PANQUEQUEIRA",itens:[
+    {nome:"CREPEIRA",volt:true},
+    {nome:"PANQUEQUEIRA",volt:true},
+  ]},
+  {tipo:"ELEVATÓRIAS",itens:[
+    {nome:"ELEVATÓRIA 3 ESPETOS",lado:true},
+    {nome:"ELEVATÓRIA 4 ESPETOS",lado:true},
+  ]},
+];
+function pmVars(p){return p.volt?PM_VARS.volt:(p.lado?PM_VARS.lado:null);}
+const PM_TODOS=[];
+PM_GRUPOS.forEach(g=>g.itens.forEach(p=>PM_TODOS.push({...p,tipo:g.tipo})));
+function pmNorm(s){return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase();}
+const PM_NORM=PM_TODOS.map(p=>pmNorm(p.nome+' '+p.tipo));
+
+const PM_CHAVE='assist_pm_qtds_v1';
+let pmQtds=pmCarregar();
+function pmCarregar(){try{const r=localStorage.getItem(PM_CHAVE);if(r){const o=JSON.parse(r);if(o&&typeof o==='object')return o;}}catch(e){}return{};}
+function pmSalvar(){try{localStorage.setItem(PM_CHAVE,JSON.stringify(pmQtds));}catch(e){}}
+function pmK(nome,k){return k?nome+'_'+k:nome;}
+function pmGet(nome,k){return parseInt(pmQtds[pmK(nome,k)])||0;}
+function pmSet(nome,k,val){pmQtds[pmK(nome,k)]=val;pmSalvar();}
+
+const pmRefs={};
+const pmCardRefs={};
+function pmMontar(){
+  const lista=document.getElementById('pmLista');
+  lista.innerHTML='';
+  let tipoAtual=null;
+  PM_TODOS.forEach((p,idx)=>{
+    if(p.tipo!==tipoAtual){
+      tipoAtual=p.tipo;
+      const hdr=document.createElement('div');hdr.className='pm-tipo-hdr';hdr.textContent=p.tipo;
+      hdr.dataset.tipo=p.tipo;lista.append(hdr);
+    }
+    const vars=pmVars(p);
+    const card=document.createElement('div');
+    card.className=vars?'pm-card':'pm-card pm-single';
+    card.dataset.idx=idx;
+    pmCardRefs[p.nome]=card;
+    if(vars){
+      const nm=document.createElement('div');nm.className='pm-nome';nm.textContent=p.nome;card.append(nm);
+      vars.forEach(v=>{
+        const row=document.createElement('div');row.className='pm-volt-row';
+        const lbl=document.createElement('span');lbl.className='pm-volt-label';lbl.textContent=v.lbl;
+        const ctr=document.createElement('div');ctr.className='pm-counter';
+        const menos=document.createElement('button');menos.className='pm-menos';menos.textContent='−';
+        menos.addEventListener('click',()=>pmDec(p.nome,v.k));
+        const num=document.createElement('div');num.className='pm-num';num.textContent='0';
+        const mais=document.createElement('button');mais.className='pm-mais';mais.textContent='+';
+        mais.addEventListener('click',()=>pmInc(p.nome,v.k));
+        ctr.append(menos,num,mais);row.append(lbl,ctr);card.append(row);
+        pmRefs[pmK(p.nome,v.k)]={numEl:num,menosEl:menos,voltLabel:lbl};
+        pmPintarItem(p.nome,v.k);
+      });
+    }else{
+      const nm=document.createElement('div');nm.className='pm-nome';nm.textContent=p.nome;
+      const ctr=document.createElement('div');ctr.className='pm-counter';
+      const menos=document.createElement('button');menos.className='pm-menos';menos.textContent='−';
+      menos.addEventListener('click',()=>pmDec(p.nome,null));
+      const num=document.createElement('div');num.className='pm-num';num.textContent='0';
+      const mais=document.createElement('button');mais.className='pm-mais';mais.textContent='+';
+      mais.addEventListener('click',()=>pmInc(p.nome,null));
+      ctr.append(menos,num,mais);card.append(nm,ctr);
+      pmRefs[pmK(p.nome,null)]={numEl:num,menosEl:menos,voltLabel:null};
+      pmPintarItem(p.nome,null);
+    }
+    lista.append(card);
+  });
+  pmAtualizarTotal();
+}
+function pmPintarItem(nome,k){
+  const r=pmRefs[pmK(nome,k)];if(!r)return;
+  const v=pmGet(nome,k);
+  r.numEl.textContent=v;r.numEl.classList.toggle('tem',v>0);r.menosEl.disabled=v<=0;
+  if(r.voltLabel)r.voltLabel.classList.toggle('tem',v>0);
+  const p=PM_TODOS.find(x=>x.nome===nome);
+  const card=pmCardRefs[nome];if(!card)return;
+  const vars=pmVars(p);
+  const temAlgo=vars?vars.some(v=>pmGet(nome,v.k)>0):pmGet(nome,null)>0;
+  card.classList.toggle('tem',temAlgo);
+}
+function pmInc(nome,k){pmSet(nome,k,pmGet(nome,k)+1);pmPintarItem(nome,k);pmAtualizarTotal();pmFeedback(nome,k);}
+function pmDec(nome,k){pmSet(nome,k,Math.max(0,pmGet(nome,k)-1));pmPintarItem(nome,k);pmAtualizarTotal();}
+function pmFeedback(nome,k){
+  const r=pmRefs[pmK(nome,k)];if(!r)return;
+  if('vibrate' in navigator){try{navigator.vibrate(15);}catch(e){}}
+  r.numEl.classList.remove('pulsar');void r.numEl.offsetWidth;r.numEl.classList.add('pulsar');
+}
+function pmAtualizarTotal(){
+  const t=Object.values(pmQtds).reduce((a,b)=>a+(parseInt(b)||0),0);
+  document.getElementById('pmTotal').textContent=t;
+}
+
+let pmTipoAtivo=null;
+(function(){
+  const bar=document.getElementById('pmTiposBar');
+  const todos=document.createElement('button');todos.className='pm-tipo-chip ativo';todos.textContent='Todos';
+  todos.addEventListener('click',()=>pmSetTipo(null,todos));bar.append(todos);
+  const chips=[todos];
+  PM_GRUPOS.forEach(g=>{const b=document.createElement('button');b.className='pm-tipo-chip';b.textContent=g.tipo;b.addEventListener('click',()=>pmSetTipo(g.tipo,b));bar.append(b);chips.push(b);});
+  window._pmChips=chips;
+})();
+function pmSetTipo(t,btn){
+  pmTipoAtivo=t;window._pmChips.forEach(c=>c.classList.remove('ativo'));btn.classList.add('ativo');
+  if(pmBuscaEl.value)pmBuscaEl.value='';pmFiltrar();document.getElementById('pmLista').scrollTop=0;
+}
+const pmBuscaEl=document.getElementById('pmBusca');
+const pmLimparEl=document.getElementById('pmLimparBusca');
+pmBuscaEl.addEventListener('input',pmFiltrar);
+pmLimparEl.addEventListener('click',()=>{pmBuscaEl.value='';pmFiltrar();pmBuscaEl.focus();});
+function pmFiltrar(){
+  const q=pmBuscaEl.value.trim();
+  pmLimparEl.classList.toggle('on',q.length>0);
+  const termos=pmNorm(q).split(/\s+/).filter(Boolean);
+  const lista=document.getElementById('pmLista');
+  let vis=0;
+  lista.querySelectorAll('.pm-card').forEach((card,i)=>{
+    const p=PM_TODOS[i];
+    const okBusca=termos.every(t=>PM_NORM[i].includes(t));
+    const okTipo=!pmTipoAtivo||q?true:(p.tipo===pmTipoAtivo);
+    const ok=okBusca&&okTipo;card.style.display=ok?'':'none';if(ok)vis++;
+  });
+  lista.querySelectorAll('.pm-tipo-hdr').forEach(hdr=>{
+    const tipo=hdr.dataset.tipo;
+    const algum=Array.from(lista.querySelectorAll('.pm-card')).some((c,i)=>PM_TODOS[i].tipo===tipo&&c.style.display!=='none');
+    hdr.style.display=algum?'':'none';
+  });
+  let vz=document.getElementById('pmVazio');
+  if(vis===0){if(!vz){vz=document.createElement('div');vz.id='pmVazio';vz.className='vazio-busca';lista.append(vz);}vz.textContent='Nenhum produto encontrado.';}else if(vz){vz.remove();}
+}
+
+const pmSheetBg=document.getElementById('pmSheetBg');
+const pmSheetMenu=document.getElementById('pmSheetMenu');
+document.getElementById('pmBtnMenu').addEventListener('click',()=>{pmSheetBg.classList.add('on');pmSheetMenu.classList.add('on');});
+document.getElementById('pmBtnFecharMenu').addEventListener('click',pmFecharSheet);
+pmSheetBg.addEventListener('click',pmFecharSheet);
+function pmFecharSheet(){pmSheetBg.classList.remove('on');pmSheetMenu.classList.remove('on');}
+document.getElementById('pmBtnLimpar').addEventListener('click',()=>{
+  if(confirm('Apagar toda a contagem Pratic Metal?')){pmQtds={};pmSalvar();pmMontar();pmFecharSheet();toast('Contagem apagada');}
+});
+
+document.getElementById('pmBtnEnviar').addEventListener('click',pmAbrirResumo);
+document.getElementById('pmResumoFechar').addEventListener('click',()=>document.getElementById('pmResumo').classList.remove('on'));
+function pmBlocos(){
+  const out=[];
+  PM_TODOS.forEach(p=>{
+    const vars=pmVars(p);
+    if(vars){
+      const linhas=[];
+      vars.forEach(v=>{const q=pmGet(p.nome,v.k);if(q>0)linhas.push({rot:v.pdf,qtd:q});});
+      if(linhas.length)out.push({nome:p.nome,linhas});
+    }else{
+      const q=pmGet(p.nome,null);
+      if(q>0)out.push({nome:p.nome,linhas:[{rot:'',qtd:q}]});
+    }
+  });
+  return out;
+}
+function pmAbrirResumo(){
+  const bl=pmBlocos();const body=document.getElementById('pmResumoBody');body.innerHTML='';
+  if(!bl.length){const v=document.createElement('div');v.className='resumo-vazio';v.textContent='Nenhuma peça contada ainda.';body.append(v);}
+  else bl.forEach(b=>{
+    b.linhas.forEach(l=>{
+      const row=document.createElement('div');row.className='pm-resumo-item';
+      const nm=document.createElement('div');nm.className='rnome';nm.textContent=l.rot?b.nome+' '+l.rot:b.nome;
+      const q=document.createElement('div');q.className='rqtd';q.textContent=l.qtd;
+      row.append(nm,q);body.append(row);
+    });
+  });
+  document.getElementById('pmResumo').classList.add('on');
+}
+function pmTextoEnvio(){
+  const data=new Date().toLocaleDateString('pt-BR');const bl=pmBlocos();
+  if(!bl.length)return 'Pratic Metal ('+data+')\nNenhuma peça contada.';
+  let total=0;const linhas=[];
+  bl.forEach(b=>b.linhas.forEach(l=>{total+=l.qtd;linhas.push(l.qtd+' - '+(l.rot?b.nome+' '+l.rot:b.nome));}));
+  return 'Pratic Metal ('+data+')\n\n'+linhas.join('\n')+'\n\n'+total+' peças';
+}
+document.getElementById('pmBtnCopiar').addEventListener('click',()=>copiar(pmTextoEnvio(),'Lista copiada'));
+document.getElementById('pmBtnCopiarResumo').addEventListener('click',()=>copiar(pmTextoEnvio(),'Lista copiada'));
+function pmGerarFolha(){
+  const bl=pmBlocos();if(!bl.length){toast('Nenhuma peça contada');return;}
+  const data=new Date().toLocaleDateString('pt-BR');let total=0,corpo='';
+  bl.forEach(b=>{
+    if(b.linhas.length===1&&!b.linhas[0].rot){
+      const q=b.linhas[0].qtd;total+=q;
+      corpo+='<div class="g s"><span class="s-nome">'+fgEsc(b.nome)+'</span><span class="s-tr">—</span><span class="s-q">'+q+'</span><span class="g-conf">CONFERIDO</span><span class="g-box"></span></div>';
+    }else{
+      corpo+='<div class="g"><div class="g-nome">'+fgEsc(b.nome)+'</div>';
+      b.linhas.forEach(l=>{
+        total+=l.qtd;
+        corpo+='<div class="g-def"><span class="g-rot">'+(l.rot||'—')+'</span><span class="g-q">'+l.qtd+'</span><span class="g-conf">CONFERIDO</span><span class="g-box"></span></div>';
+      });
+      corpo+='</div>';
+    }
+  });
+  const html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Pratic Metal - '+data+'</title><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;color:#111;padding:20px 24px;font-size:11px}.cab{border-bottom:2px solid #15803d;padding-bottom:8px;margin-bottom:11px}.cab h1{font-size:17px;color:#15803d}.cab .d{font-size:11px;color:#444;margin-top:2px}.g{margin:9px 0 6px;break-inside:avoid}.g.s+.g.s{margin-top:0}.g-nome{font-weight:bold;font-size:12px;color:#15803d;border-bottom:1px solid #ccc;padding-bottom:2px;margin-bottom:3px}.g-def{display:flex;align-items:center;gap:10px;padding:2px 0 2px 10px;font-size:11px}.g-rot{font-weight:bold;min-width:62px;color:#15803d}.g-q{min-width:26px;font-weight:bold;text-align:right}.g.s{display:flex;align-items:center;gap:8px;margin-bottom:3px;border-bottom:1px solid #eee;padding:3px 0 3px 2px}.s-nome{font-weight:bold;font-size:12px;color:#15803d}.s-tr{color:#999}.s-q{font-weight:bold;font-size:12px;min-width:24px;text-align:right}.g-conf{margin-left:auto;font-size:9px;font-weight:bold;color:#999;letter-spacing:.5px}.g-box{width:90px;height:18px;border:1px solid #15803d;border-radius:4px}.tot{margin-top:8px;font-weight:bold;font-size:12px;color:#15803d;border-top:1px solid #ccc;padding-top:6px}.ass{display:flex;gap:40px;margin-top:46px;break-inside:avoid}.ass .col{flex:1;text-align:center}.ass .linha{border-top:1px solid #111;padding-top:6px;font-size:11px;font-weight:bold}@media print{body{padding:12mm}}</style></head><body><div class="cab"><h1>Pratic Metal</h1><div class="d">Data: '+data+'</div></div>'+corpo+'<div class="tot">Total: '+total+' peças</div><div class="ass"><div class="col"><div class="linha">FERNANDO ZERBATTI</div></div><div class="col"><div class="linha">PRATIC METAL</div></div></div></body></html>';
+  const w=window.open('','_blank');
+  if(!w){toast('Permita abrir a folha (pop-up)');return;}
+  w.document.open();w.document.write(html);w.document.close();
+  setTimeout(()=>{try{w.focus();w.print();}catch(e){}},350);
+}
+document.getElementById('pmBtnFolhaPDF').addEventListener('click',pmGerarFolha);
+
 // ===== INIT =====
 jlMontar();
 fgMontar();
+pmMontar();
 atualizarBadges();
 
 // ===== SERVICE WORKER =====
