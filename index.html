@@ -555,14 +555,19 @@ function jlGerarFolha(){
   const bl=jlBlocos();if(!bl.length){toast('Nenhuma peça contada');return;}
   const data=new Date().toLocaleDateString('pt-BR');let total=0,corpo='';
   bl.forEach(b=>{
-    corpo+='<div class="g"><div class="g-nome">'+fgEsc(b.nome)+'</div>';
-    b.linhas.forEach(l=>{
-      total+=l.qtd;
-      corpo+='<div class="g-def"><span class="g-rot">'+(l.rot||'—')+'</span><span class="g-q">'+l.qtd+'</span><span class="g-conf">CONFERIDO</span><span class="g-box"></span></div>';
-    });
-    corpo+='</div>';
+    if(b.linhas.length===1&&!b.linhas[0].rot){
+      const q=b.linhas[0].qtd;total+=q;
+      corpo+='<div class="g s"><span class="s-nome">'+fgEsc(b.nome)+'</span><span class="s-tr">—</span><span class="s-q">'+q+'</span><span class="g-conf">CONFERIDO</span><span class="g-box"></span></div>';
+    }else{
+      corpo+='<div class="g"><div class="g-nome">'+fgEsc(b.nome)+'</div>';
+      b.linhas.forEach(l=>{
+        total+=l.qtd;
+        corpo+='<div class="g-def"><span class="g-rot">'+(l.rot||'—')+'</span><span class="g-q">'+l.qtd+'</span><span class="g-conf">CONFERIDO</span><span class="g-box"></span></div>';
+      });
+      corpo+='</div>';
+    }
   });
-  const html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>JL Colombo - '+data+'</title><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;color:#111;padding:26px 30px;font-size:13px}.cab{border-bottom:2px solid #1f3a5f;padding-bottom:10px;margin-bottom:16px}.cab h1{font-size:19px;color:#1f3a5f}.cab .d{font-size:13px;color:#444;margin-top:3px}.g{margin-bottom:13px;break-inside:avoid}.g-nome{font-weight:bold;font-size:14px;color:#1f3a5f;border-bottom:1px solid #ccc;padding-bottom:3px;margin-bottom:5px}.g-def{display:flex;align-items:center;gap:10px;padding:4px 0 4px 10px;font-size:13px}.g-rot{font-weight:bold;min-width:42px;color:#1f3a5f}.g-q{min-width:30px;font-weight:bold;text-align:right}.g-conf{margin-left:auto;font-size:10px;font-weight:bold;color:#999;letter-spacing:.6px}.g-box{width:96px;height:22px;border:1px solid #1f3a5f;border-radius:4px}.tot{margin-top:10px;font-weight:bold;font-size:14px;color:#1f3a5f;border-top:1px solid #ccc;padding-top:8px}.ass{display:flex;gap:40px;margin-top:60px}.ass .col{flex:1;text-align:center}.ass .linha{border-top:1px solid #111;padding-top:6px;font-size:12px;font-weight:bold}@media print{body{padding:14mm}}</style></head><body><div class="cab"><h1>JL Colombo</h1><div class="d">Data: '+data+'</div></div>'+corpo+'<div class="tot">Total: '+total+' peças</div><div class="ass"><div class="col"><div class="linha">FERNANDO ZERBATTI</div></div><div class="col"><div class="linha">JL COLOMBO</div></div></div></body></html>';
+  const html='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>JL Colombo - '+data+'</title><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;color:#111;padding:20px 24px;font-size:11px}.cab{border-bottom:2px solid #1f3a5f;padding-bottom:8px;margin-bottom:11px}.cab h1{font-size:17px;color:#1f3a5f}.cab .d{font-size:11px;color:#444;margin-top:2px}.g{margin:9px 0 6px;break-inside:avoid}.g.s+.g.s{margin-top:0}.g-nome{font-weight:bold;font-size:12px;color:#1f3a5f;border-bottom:1px solid #ccc;padding-bottom:2px;margin-bottom:3px}.g-def{display:flex;align-items:center;gap:10px;padding:2px 0 2px 10px;font-size:11px}.g-rot{font-weight:bold;min-width:38px;color:#1f3a5f}.g-q{min-width:26px;font-weight:bold;text-align:right}.g.s{display:flex;align-items:center;gap:8px;margin-bottom:3px;border-bottom:1px solid #eee;padding:3px 0 3px 2px}.s-nome{font-weight:bold;font-size:12px;color:#1f3a5f}.s-tr{color:#999}.s-q{font-weight:bold;font-size:12px;min-width:24px;text-align:right}.g-conf{margin-left:auto;font-size:9px;font-weight:bold;color:#999;letter-spacing:.5px}.g-box{width:90px;height:18px;border:1px solid #1f3a5f;border-radius:4px}.tot{margin-top:8px;font-weight:bold;font-size:12px;color:#1f3a5f;border-top:1px solid #ccc;padding-top:6px}.ass{display:flex;gap:40px;margin-top:46px;break-inside:avoid}.ass .col{flex:1;text-align:center}.ass .linha{border-top:1px solid #111;padding-top:6px;font-size:11px;font-weight:bold}@media print{body{padding:12mm}}</style></head><body><div class="cab"><h1>JL Colombo</h1><div class="d">Data: '+data+'</div></div>'+corpo+'<div class="tot">Total: '+total+' peças</div><div class="ass"><div class="col"><div class="linha">FERNANDO ZERBATTI</div></div><div class="col"><div class="linha">JL COLOMBO</div></div></div></body></html>';
   const w=window.open('','_blank');
   if(!w){toast('Permita abrir a folha (pop-up)');return;}
   w.document.open();w.document.write(html);w.document.close();
