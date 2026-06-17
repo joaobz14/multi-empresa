@@ -1,4 +1,4 @@
-const CACHE = "assist-multi-v1";
+const CACHE = "assist-multi-v2";
 const ASSETS = [
   "./index.html",
   "./manifest.webmanifest",
@@ -8,13 +8,9 @@ const ASSETS = [
 
 self.addEventListener("install", e => {
   e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(ASSETS.filter(a => !a.endsWith(".png") || false)
-      .concat(ASSETS)
-      .filter((v, i, arr) => arr.indexOf(v) === i)
-    ).catch(() => caches.open(CACHE).then(c => c.add("./index.html")))
-    )
+    caches.open(CACHE).then(c => c.addAll(ASSETS))
   );
-  self.skipWaiting();
+  // NÃO chama skipWaiting aqui — fica em waiting até o usuário confirmar
 });
 
 self.addEventListener("activate", e => {
