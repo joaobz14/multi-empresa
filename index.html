@@ -172,7 +172,6 @@ body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#ee
   </div>
   <div class="home-body">
     <button class="empresa-card jl" onclick="abrirView('viewJL')">
-      <span class="empresa-icon">🔧</span>
       <div class="empresa-info">
         <div class="empresa-nome">JL COLOMBO</div>
         <div class="empresa-badge" id="badgeJL">0 peças</div>
@@ -180,7 +179,6 @@ body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#ee
       <span class="empresa-seta">›</span>
     </button>
     <button class="empresa-card fg" onclick="abrirView('viewFG')">
-      <span class="empresa-icon">🍳</span>
       <div class="empresa-info">
         <div class="empresa-nome">FAST GOURMET</div>
         <div class="empresa-badge" id="badgeFG">0 defeitos</div>
@@ -188,7 +186,6 @@ body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#ee
       <span class="empresa-seta">›</span>
     </button>
     <button class="empresa-card pm" onclick="abrirView('viewPM')">
-      <span class="empresa-icon">🏭</span>
       <div class="empresa-info">
         <div class="empresa-nome">PRATIC METAL</div>
         <div class="empresa-badge">Em breve</div>
@@ -345,9 +342,11 @@ function atualizarBadges(){
 // ========== JL COLOMBO ==========
 // ===================================================
 const JL_GRUPOS=[
-  {tipo:"M1",itens:[
+  {tipo:"AR M1",itens:[
     {nome:"LIQUIDIFICADOR AR 2L M1",volt:true},
     {nome:"LIQUIDIFICADOR AR 4L M1",volt:true},
+  ]},
+  {tipo:"BR M1",itens:[
     {nome:"LIQUIDIFICADOR BR 2L M1",volt:true},
     {nome:"LIQUIDIFICADOR BR 4L M1",volt:true},
     {nome:"LIQUIDIFICADOR BR 6L M1",volt:true},
@@ -355,47 +354,20 @@ const JL_GRUPOS=[
     {nome:"LIQUIDIFICADOR BR 10L M1",volt:true},
     {nome:"MILK SHAKE",volt:true},
   ]},
-  {tipo:"LEVE",itens:[
-    {nome:"LIQUIDIFICADOR BR 2L LEVE",volt:true},
-    {nome:"LIQUIDIFICADOR BR 3,5L LEVE",volt:true},
-    {nome:"LIQUIDIFICADOR BR 6L LEVE",volt:true},
-    {nome:"LIQUIDIFICADOR BR 8L LEVE",volt:true},
-    {nome:"LIQUIDIFICADOR BR 10L LEVE",volt:true},
-  ]},
-  {tipo:"JL",itens:[
-    {nome:"LIQUIDIFICADOR AR 2L JL",volt:true},
-    {nome:"LIQUIDIFICADOR AR 4L JL",volt:true},
+  {tipo:"BR JL",itens:[
     {nome:"LIQUIDIFICADOR BR 2L JL"},
     {nome:"LIQUIDIFICADOR BR 4L JL"},
     {nome:"LIQUIDIFICADOR BR 6L JL"},
     {nome:"LIQUIDIFICADOR BR 8L JL"},
     {nome:"LIQUIDIFICADOR BR 10L JL"},
     {nome:"LIQUIDIFICADOR BR 12L JL"},
-    {nome:"CAVALETE 15L"},
-    {nome:"CAVALETE 19L"},
-    {nome:"CAVALETE 25L"},
-    {nome:"CAVALETE 30L"},
-    {nome:"CUTTER 6L",volt:true},
   ]},
-  {tipo:"ACESSÓRIOS",itens:[
-    {nome:"BICA PLÁSTICA"},
-    {nome:"ARRASTE AR"},
-    {nome:"ARRASTE BR"},
-    {nome:"MANCAL AR"},
-    {nome:"MANCAL BR"},
-    {nome:"COPO 2L AR"},
-    {nome:"COPO 4L AR"},
-    {nome:"COPO 2L BR"},
-    {nome:"COPO 4L BR"},
-    {nome:"COPO MILK SHAKE"},
-    {nome:"PONTEIRA"},
-    {nome:"PICADOR PEQUENO"},
-    {nome:"PICADOR MÉDIO"},
-    {nome:"PICADOR PREMIUM"},
-    {nome:"POWER"},
-    {nome:"PP"},
-    {nome:"MODELADOR DE HAMBÚRGUER"},
-    {nome:"CANHÃO"},
+  {tipo:"LEVE",itens:[
+    {nome:"LIQUIDIFICADOR BR 2L LEVE",volt:true},
+    {nome:"LIQUIDIFICADOR BR 3,5L LEVE",volt:true},
+    {nome:"LIQUIDIFICADOR BR 6L LEVE",volt:true},
+    {nome:"LIQUIDIFICADOR BR 8L LEVE",volt:true},
+    {nome:"LIQUIDIFICADOR BR 10L LEVE",volt:true},
   ]},
 ];
 const JL_TODOS=[];
