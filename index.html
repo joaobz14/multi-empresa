@@ -1119,6 +1119,16 @@ if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
     reg.update();document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')reg.update();});
   }).catch(()=>{});});
 }
+// drag-to-scroll nas barras de filtros (mouse no desktop)
+['jlTiposBar','fgTiposBar','pmTiposBar'].forEach(id=>{
+  const el=document.getElementById(id);if(!el)return;
+  let down=false,startX=0,scrollLeft=0,moved=false;
+  el.addEventListener('mousedown',e=>{down=true;moved=false;startX=e.pageX-el.offsetLeft;scrollLeft=el.scrollLeft;el.style.cursor='grabbing';e.preventDefault();});
+  el.addEventListener('mouseleave',()=>{down=false;el.style.cursor='';});
+  el.addEventListener('mouseup',e=>{down=false;el.style.cursor='';if(moved)e.stopPropagation();});
+  el.addEventListener('mousemove',e=>{if(!down)return;const dx=(e.pageX-el.offsetLeft)-startX;if(Math.abs(dx)>4)moved=true;el.scrollLeft=scrollLeft-dx;});
+  el.addEventListener('click',e=>{if(moved)e.stopPropagation();},true);
+});
 </script>
 </body>
 </html>
