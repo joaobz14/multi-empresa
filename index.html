@@ -441,6 +441,28 @@ const JL_GRUPOS=[
     {nome:"LIQUIDIFICADOR BR 8L LEVE",volt:true},
     {nome:"LIQUIDIFICADOR BR 10L LEVE",volt:true},
   ]},
+  {tipo:"AR JL",itens:[
+    {nome:"LIQUIDIFICADOR AR 2L JL",volt:true},
+    {nome:"LIQUIDIFICADOR AR 4L JL",volt:true},
+  ]},
+  {tipo:"CUTTER",itens:[
+    {nome:"CUTTER 6L",volt:true},
+  ]},
+  {tipo:"CAVALETE",itens:[
+    {nome:"CAVALETE 15L"},
+    {nome:"CAVALETE 19L"},
+    {nome:"CAVALETE 25L"},
+    {nome:"CAVALETE 30L"},
+  ]},
+  {tipo:"OUTROS",itens:[
+    {nome:"BICA PLÁSTICA"},
+    {nome:"POWER"},
+    {nome:"PP"},
+    {nome:"MODELADOR DE HAMBÚRGUER"},
+    {nome:"CANHÃO"},
+    {nome:"COPO AR",tam:true},
+    {nome:"COPO BR",tam:true},
+  ]},
 ];
 const JL_TODOS=[];
 JL_GRUPOS.forEach(g=>g.itens.forEach(p=>JL_TODOS.push({...p,tipo:g.tipo})));
@@ -468,13 +490,14 @@ function jlMontar(){
       const hdr=document.createElement('div');hdr.className='jl-tipo-hdr';hdr.textContent=p.tipo;
       hdr.dataset.tipo=p.tipo;lista.append(hdr);
     }
+    const jlVars=p.volt?['110','220']:p.tam?['2L','4L']:null;
     const card=document.createElement('div');
-    card.className=p.volt?'jl-card':'jl-card jl-single';
+    card.className=jlVars?'jl-card':'jl-card jl-single';
     card.dataset.idx=idx;
     jlCardRefs[p.nome]=card;
-    if(p.volt){
+    if(jlVars){
       const nm=document.createElement('div');nm.className='jl-nome';nm.textContent=p.nome;card.append(nm);
-      ['110','220'].forEach(v=>{
+      jlVars.forEach(v=>{
         const row=document.createElement('div');row.className='jl-volt-row';
         const lbl=document.createElement('span');lbl.className='jl-volt-label';lbl.textContent=v;
         const ctr=document.createElement('div');ctr.className='jl-counter';
@@ -511,7 +534,8 @@ function jlPintarItem(nome,volt){
   if(r.voltLabel)r.voltLabel.classList.toggle('tem',v>0);
   const p=JL_TODOS.find(x=>x.nome===nome);
   const card=jlCardRefs[nome];if(!card)return;
-  const temAlgo=p&&p.volt?(jlGet(nome,'110')>0||jlGet(nome,'220')>0):jlGet(nome,null)>0;
+  const jlVarsP=p&&(p.volt?['110','220']:p.tam?['2L','4L']:null);
+  const temAlgo=jlVarsP?jlVarsP.some(v=>jlGet(nome,v)>0):jlGet(nome,null)>0;
   card.classList.toggle('tem',temAlgo);
 }
 function jlInc(nome,volt){jlSet(nome,volt,jlGet(nome,volt)+1);jlPintarItem(nome,volt);jlAtualizarTotal();jlFeedback(nome,volt);}
@@ -580,7 +604,8 @@ document.getElementById('jlResumoFechar').addEventListener('click',()=>document.
 function jlLinhas(){
   const out=[];
   JL_TODOS.forEach(p=>{
-    if(p.volt){['110','220'].forEach(v=>{const q=jlGet(p.nome,v);if(q>0)out.push({nome:p.nome+' '+v,qtd:q});});}
+    const jlVarsL=p.volt?['110','220']:p.tam?['2L','4L']:null;
+    if(jlVarsL){jlVarsL.forEach(v=>{const q=jlGet(p.nome,v);if(q>0)out.push({nome:p.nome+' '+v,qtd:q});});}
     else{const q=jlGet(p.nome,null);if(q>0)out.push({nome:p.nome,qtd:q});}
   });
   return out;
@@ -602,9 +627,10 @@ document.getElementById('jlBtnCopiarResumo').addEventListener('click',()=>copiar
 function jlBlocos(){
   const out=[];
   JL_TODOS.forEach(p=>{
-    if(p.volt){
+    if(p.volt||p.tam){
+      const vars=p.volt?['110','220']:['2L','4L'];
       const linhas=[];
-      ['110','220'].forEach(v=>{const q=jlGet(p.nome,v);if(q>0)linhas.push({rot:v+'V',qtd:q});});
+      vars.forEach(v=>{const q=jlGet(p.nome,v);if(q>0)linhas.push({rot:p.volt?v+'V':v,qtd:q});});
       if(linhas.length)out.push({nome:p.nome,linhas});
     }else{
       const q=jlGet(p.nome,null);
